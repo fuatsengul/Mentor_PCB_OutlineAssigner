@@ -583,5 +583,18 @@ namespace xPCB_OutlineAssigner
         {
 
         }
+
+        private void OutlineAssigner_HelpButtonClicked(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+            MessageBox.Show(
+                "Outline Assigner\r\n" +
+                "\r\n" +
+                "Milbitt Engineering Inc.\r\n" +
+                "www.milbitt.com",
+                "About",
+                MessageBoxButtons.OK
+           );
+        }
     }
 }

@@ -376,6 +376,7 @@
             this.Controls.Add(this.metroPanel2);
             this.Controls.Add(this.metroPanel1);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.HelpButton = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "OutlineAssigner";
@@ -385,6 +386,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Outline Assigner";
             this.TopMost = true;
+            this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.OutlineAssigner_HelpButtonClicked);
             this.Load += new System.EventHandler(this.OutlineAssigner_Load);
             this.Shown += new System.EventHandler(this.OutlineAssigner_Shown);
             this.metroPanel1.ResumeLayout(false);
