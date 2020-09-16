@@ -22,8 +22,9 @@ namespace xPCB_OutlineAssigner
         public OutlineAssigner(string appGUID)
         {
             InitializeComponent();
-
-            MGCPCBReleaseEnvironmentLib.IMGCPCBReleaseEnvServer _server = 
+            try
+            {
+                MGCPCBReleaseEnvironmentLib.IMGCPCBReleaseEnvServer _server =
                 (MGCPCBReleaseEnvironmentLib.IMGCPCBReleaseEnvServer)Activator.CreateInstance(
                     Marshal.GetTypeFromCLSID(
                         new Guid("44983CB8-19B0-4695-937A-6FF0B74ECFC5")
@@ -31,35 +32,42 @@ namespace xPCB_OutlineAssigner
                 );
 
 
-            _server.SetEnvironment("");
-            string VxVersion = _server.sddVersion;
-            string strSDD_HOME = _server.sddHome;
-            int length = strSDD_HOME.IndexOf("SDD_HOME");
-            strSDD_HOME = strSDD_HOME.Substring(0, length).Replace("\\", "\\\\") + "SDD_HOME";
-            _server.SetEnvironment(strSDD_HOME);
-            string progID = _server.ProgIDVersion;
+                _server.SetEnvironment("");
+                string VxVersion = _server.sddVersion;
+                string strSDD_HOME = _server.sddHome;
+                int length = strSDD_HOME.IndexOf("SDD_HOME");
+                strSDD_HOME = strSDD_HOME.Substring(0, length).Replace("\\", "\\\\") + "SDD_HOME";
+                _server.SetEnvironment(strSDD_HOME);
+                string progID = _server.ProgIDVersion;
 
-            MGCPCB.Application pcbApp = (MGCPCB.Application)Interaction.GetObject(null, "MGCPCB.Application." + progID);
-            if (pcbApp == null)
-            {
-                MessageBox.Show("Could not found active Xpedition or PADSPro Application");
-                System.Environment.Exit(1);
+
+                MGCPCB.Application pcbApp = (MGCPCB.Application)Interaction.GetObject(null, "MGCPCB.Application." + progID);
+                if (pcbApp == null)
+                {
+                    MessageBox.Show("Could not found active Xpedition or PADSPro Application");
+                    System.Environment.Exit(1);
+                }
+
+                pcbDoc = pcbApp.ActiveDocument;
+                MGCPCBAutomationLicensing.Application licApp = new MGCPCBAutomationLicensing.Application();
+                int _token = licApp.GetToken(pcbDoc.Validate(0));
+                pcbDoc.Validate(_token);
+
+                routerRadius.Items.Add(new DarkUI.Controls.DarkDropdownItem("2.4 mm"));
+                routerRadius.Items.Add(new DarkUI.Controls.DarkDropdownItem("2.2 mm"));
+                routerRadius.Items.Add(new DarkUI.Controls.DarkDropdownItem("2.0 mm"));
+                routerRadius.Items.Add(new DarkUI.Controls.DarkDropdownItem("1.6 mm"));
+                routerRadius.Text = "2.4 mm";
+
+                if (pcbDoc == null)
+                {
+                    MessageBox.Show("Could not found active Xpedition or PADSPro Application");
+                    System.Environment.Exit(1);
+                }
             }
-
-            pcbDoc = pcbApp.ActiveDocument;
-            MGCPCBAutomationLicensing.Application licApp = new MGCPCBAutomationLicensing.Application();
-            int _token = licApp.GetToken(pcbDoc.Validate(0));
-            pcbDoc.Validate(_token);
-
-            routerRadius.Items.Add(new DarkUI.Controls.DarkDropdownItem("2.4 mm"));
-            routerRadius.Items.Add(new DarkUI.Controls.DarkDropdownItem("2.2 mm"));
-            routerRadius.Items.Add(new DarkUI.Controls.DarkDropdownItem("2.0 mm"));
-            routerRadius.Items.Add(new DarkUI.Controls.DarkDropdownItem("1.6 mm"));
-            routerRadius.Text = "2.4 mm";
-
-            if (pcbDoc == null)
+            catch (Exception m)
             {
-                MessageBox.Show("Could not found active Xpedition or PADSPro Application");
+                MessageBox.Show(m.Message + "\r\n" + m.Source + "\r\n" + m.StackTrace);
                 System.Environment.Exit(1);
             }
         }
