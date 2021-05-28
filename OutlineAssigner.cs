@@ -101,12 +101,18 @@ namespace xPCB_OutlineAssigner
         private void GObutton_Click( object sender, EventArgs e )
         {
             double Rwidth = 94.488;
-            switch (routerRadius.SelectedItem.Text)
+            try
             {
-                case "2.4 mm": Rwidth = 94.488; break;
-                case "2.0 mm": Rwidth = 78.74; break;
-                case "1.6 mm": Rwidth = 62.992; break;
-                case "1.2 mm": Rwidth = 47.244; break;
+                switch (routerRadius.SelectedItem.Text)
+                {
+                    case "2.4 mm": Rwidth = 94.488; break;
+                    case "2.0 mm": Rwidth = 78.74; break;
+                    case "1.6 mm": Rwidth = 62.992; break;
+                    case "1.2 mm": Rwidth = 47.244; break;
+                }
+            }
+            catch()
+            {
             }
             
             BackgroundWorker bw = new BackgroundWorker();
