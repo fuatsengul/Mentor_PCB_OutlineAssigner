@@ -58,8 +58,9 @@ namespace xPCB_OutlineAssigner
 
                         break;
                     }
-                    catch (Exception m)
+                    catch
                     {
+                    	
                     }
                 }
 
